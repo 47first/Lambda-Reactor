@@ -10,7 +10,7 @@ namespace Runtime
         private List<UnitView> _units = new();
         private List<Cell> _cells = new();
 
-        public IEnumerable<UnitView> Units => _units;
+        public IEnumerable<UnitView> Units => _units.Where(unit => unit != null);
 
 
         public event Action<Cell> CellClicked;

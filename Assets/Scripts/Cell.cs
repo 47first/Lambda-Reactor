@@ -17,14 +17,10 @@ namespace Runtime
             get => _highlighted;
             set
             {
-                Debug.Log($"{_highlighted} = {value}");
-
                 if (_highlighted == value)
                     return;
 
                 _highlighted = value;
-
-                Debug.Log(_highlighted);
 
                 _colorTween?.Kill();
                 if (_highlighted)

@@ -1,4 +1,6 @@
 using DG.Tweening;
+using System;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -10,6 +12,7 @@ namespace Runtime
         [Inject] private IQueryController _queryController;
 
         [field: SerializeField] public Cell Cell { get; private set; }
+        [SerializeField] private TextMeshProUGUI _stackLabel;
 
         public UnitPresenter Presenter { get; private set; }
 
@@ -24,6 +27,11 @@ namespace Runtime
             transform.DOMove(cell.transform.position, 0.5f);
         }
 
+        public void UpdateStackValue(int stackCount)
+        {
+            _stackLabel.text = stackCount.ToString();
+        }
+
         private void Awake()
         {
             Presenter = new UnitPresenter(this, _environmentController, _queryController);
@@ -32,6 +40,11 @@ namespace Runtime
         private void Start()
         {
             MoveTo(Cell);
+        }
+
+        internal void Disapear()
+        {
+            gameObject.SetActive(false);
         }
     }
 }
