@@ -37,10 +37,13 @@ namespace Runtime
         {
             _stack = Mathf.Max(_stack - (int)damage, 0);
 
-            Debug.Log("Receive Damage");
+            Debug.Log($"{_view.name} Receive Damage");
 
             if (_stack <= 0)
+            {
+                _view.Cell.Highlighted = false;
                 _view.Disapear();
+            }
             else
                 UpdateStackValue();
         }
@@ -62,6 +65,8 @@ namespace Runtime
             }
             else
             {
+                _environmentController.CellClicked -= OnCellClicked;
+
                 if (unitAtClickedCell.Presenter is IDamageable damageable)
                     damageable?.ReceiveDamage(_damage);
 

@@ -10,14 +10,14 @@ namespace Runtime
         private List<UnitView> _units = new();
         private List<Cell> _cells = new();
 
-        public IEnumerable<UnitView> Units => _units.Where(unit => unit != null);
+        public IEnumerable<UnitView> Units => _units.Where(unit => unit != null && unit.gameObject.activeSelf);
 
 
         public event Action<Cell> CellClicked;
 
         public UnitView GetUnitAt(Cell cell)
         {
-            return _units.FirstOrDefault(unit => unit.Cell == cell);
+            return Units.FirstOrDefault(unit => unit.Cell == cell);
         }
 
         private void Start()

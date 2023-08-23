@@ -53,8 +53,11 @@ namespace Runtime
 
         private void OnMouseDown()
         {
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
+            {
+                Debug.Log("Cell clicked");
                 Clicked?.Invoke();
+            }
         }
 
         private void OnDestroy()
