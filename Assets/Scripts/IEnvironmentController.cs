@@ -9,5 +9,7 @@ namespace Runtime
         public event Action<Cell> CellClicked;
 
         public IEnumerable<UnitView> Units { get; }
+
+        public UnitView GetUnitAt(Cell cell);
     }
 }

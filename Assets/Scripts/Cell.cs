@@ -4,47 +4,64 @@ using UnityEngine;
 
 namespace Runtime
 {
-    public enum CellState
-    {
-        Default,
-        Selected,
-        Highligthed
-    }
-
     public sealed class Cell : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
         private Tween _colorTween;
 
-        public event Action Selected;
         public event Action Clicked;
+
+        private bool _highlighted;
+        public bool Highlighted
+        {
+            get => _highlighted;
+            set
+            {
+                Debug.Log($"{_highlighted} = {value}");
+
+                if (_highlighted == value)
+                    return;
+
+                _highlighted = value;
+
+                Debug.Log(_highlighted);
+
+                _colorTween?.Kill();
+                if (_highlighted)
+                    _colorTween = spriteRenderer.DOColor(Color.cyan, 0.2f);
+                else
+                    _colorTween = spriteRenderer.DOColor(Color.white, 0.2f);
+            }
+        }
 
         private void OnMouseEnter()
         {
-            SetState(CellState.Selected);
+            if (_highlighted)
+                return;
+
+            _colorTween?.Kill();
+            _colorTween = spriteRenderer.DOColor(Color.gray, 0.2f);
         }
+
 
         private void OnMouseExit()
         {
-            SetState(CellState.Default);
+            if (_highlighted)
+                return;
+
+            _colorTween?.Kill();
+            _colorTween = spriteRenderer.DOColor(Color.white, 0.2f);
         }
 
         private void OnMouseDown()
         {
-            Clicked?.Invoke();
-            Selected?.Invoke();
-            SetState(CellState.Highligthed);
+            if(Input.GetMouseButtonDown(0))
+                Clicked?.Invoke();
         }
 
-        public void SetState(CellState state)
+        private void OnDestroy()
         {
-            _colorTween = state switch
-            {
-                CellState.Default => spriteRenderer.DOColor(Color.white, 0.2f),
-                CellState.Selected => spriteRenderer.DOColor(Color.gray, 0.2f),
-                CellState.Highligthed => spriteRenderer.DOColor(Color.cyan, 0.2f),
-                _ => throw null
-            };
+            _colorTween?.Kill();
         }
     }
 }

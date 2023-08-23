@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Runtime
 {
-    public class QueryController
+    public class QueryController : IQueryController
     {
         public QueryController(IEnvironmentController environmentController)
         {
@@ -20,7 +20,7 @@ namespace Runtime
             var nextUnit = GetNextInitiativeUnit();
             Debug.Log($"Next Unit - {nextUnit.name}");
 
-            nextUnit.State = UnitState.Active;
+            nextUnit.Activate();
         }
 
         private UnitView GetNextInitiativeUnit()

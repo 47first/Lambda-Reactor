@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 
 namespace Runtime
@@ -14,6 +14,11 @@ namespace Runtime
 
 
         public event Action<Cell> CellClicked;
+
+        public UnitView GetUnitAt(Cell cell)
+        {
+            return _units.FirstOrDefault(unit => unit.Cell == cell);
+        }
 
         private void Start()
         {
