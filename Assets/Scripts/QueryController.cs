@@ -1,18 +1,29 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Zenject;
 
 namespace Runtime
 {
-    public class QueryController : MonoBehaviour
+    public class QueryController
     {
-        [Inject] private IEnvironmentController _environmentController;
+        public QueryController(IEnvironmentController environmentController)
+        {
+            _environmentController = environmentController;
+        }
+
+        private IEnvironmentController _environmentController;
         private List<UnitView> _handledInitiativeUnits = new List<UnitView>();
         private int _initiative;
 
-        private UnitView GetNextInitiativeUnit(int curInitiative)
+        public void Next()
+        {
+            var nextUnit = GetNextInitiativeUnit();
+            Debug.Log($"Next Unit - {nextUnit.name}");
+
+            nextUnit.State = UnitState.Active;
+        }
+
+        private UnitView GetNextInitiativeUnit()
         {
             var nextUnit = GetNextUnhandledUnit();
 
@@ -23,12 +34,12 @@ namespace Runtime
                 nextUnit = GetBiggerInitiativeUnit();
 
                 if (nextUnit is null)
-                {
                     nextUnit = GetLowestInitiativeUnit();
-                }
 
                 _initiative = nextUnit.Initiative;
             }
+            
+            _handledInitiativeUnits.Add(nextUnit);
 
             return nextUnit;
         }
