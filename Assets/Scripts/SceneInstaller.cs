@@ -8,7 +8,7 @@ namespace Runtime
         [SerializeField] private EnvironmentController _environmentController;
         public override void InstallBindings()
         {
-            Container.BindInstance(_environmentController);
+            Container.Bind<IEnvironmentController>().FromInstance(_environmentController);
         }
     }
 }

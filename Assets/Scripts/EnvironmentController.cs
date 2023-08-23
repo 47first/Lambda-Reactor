@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Runtime
 {
-    public sealed class EnvironmentController : MonoBehaviour
+    public sealed class EnvironmentController : MonoBehaviour, IEnvironmentController
     {
         [SerializeField] private List<Cell> _cells;
 

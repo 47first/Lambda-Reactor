@@ -7,7 +7,7 @@ namespace Runtime
 {
     public sealed class UnitView : MonoBehaviour
     {
-        [Inject] private EnvironmentController _environmentController;
+        [Inject] private IEnvironmentController _environmentController;
 
         [field: SerializeField] public Cell Cell { get; private set; }
 
