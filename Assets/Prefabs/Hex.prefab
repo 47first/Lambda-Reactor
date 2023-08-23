@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5520005934483907689}
   - component: {fileID: 6796698390870249350}
   - component: {fileID: 6521034452176185850}
-  - component: {fileID: 8843256864426054145}
+  - component: {fileID: 659657983674109633}
   m_Layer: 0
   m_Name: Hex
   m_TagString: Untagged
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 6796698390870249350}
---- !u!65 &8843256864426054145
+--- !u!65 &659657983674109633
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,5 +118,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.04, y: 1.2, z: 0.2}
+  m_Size: {x: 0.9, y: 1, z: 0.05}
   m_Center: {x: 0, y: 0, z: 0}
