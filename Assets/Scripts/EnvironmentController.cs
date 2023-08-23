@@ -30,5 +30,9 @@ namespace Runtime
                 cell.Clicked += () => CellClicked?.Invoke(cell);;
             }
         }
+
+        private void SetCellsPositions()
+        {
+        }
     }
 }

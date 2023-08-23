@@ -11,6 +11,8 @@ namespace Runtime
 
         public event Action Clicked;
 
+        public Vector2 Position { get; set; }
+
         private bool _highlighted;
         public bool Highlighted
         {
