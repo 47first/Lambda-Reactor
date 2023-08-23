@@ -11,6 +11,8 @@ namespace Runtime
 
         [field: SerializeField] public Cell Cell { get; private set; }
 
+        public int Initiative { get; set; }
+
         public void MoveTo(Cell cell)
         {
             Cell.Selected -= OnCellSelected;
