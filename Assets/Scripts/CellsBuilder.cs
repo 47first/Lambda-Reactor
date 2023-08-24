@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Runtime
 {
-    public class CellsCreator : MonoBehaviour
+    public class CellsBuilder : MonoBehaviour
     {
         [SerializeField] private Cell _cellPrefab;
         [SerializeField] private Transform _cellsParent;
@@ -24,7 +24,9 @@ namespace Runtime
                 {
                     var cell = Instantiate(_cellPrefab, _cellsParent);
                     cell.Position = new Vector2(x, y);
-                    cell.transform.localPosition = new Vector3(x * _xOffset + (y % 2 == 0 ? _evenRowOffset : 0), y * _yOffset, 0);
+
+                    var rowOffset = y % 2 == 0 ? _evenRowOffset : 0;
+                    cell.transform.localPosition = new Vector3(x * _xOffset + rowOffset, y * _yOffset, 0);
                 }
             }
         }

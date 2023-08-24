@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Runtime
 {
@@ -18,8 +17,6 @@ namespace Runtime
         public void Next()
         {
             var nextUnit = GetNextInitiativeUnit();
-            Debug.Log($"Next Unit - {nextUnit.name}");
-
             nextUnit.Activate();
         }
 
@@ -31,10 +28,10 @@ namespace Runtime
             {
                 _handledInitiativeUnits.Clear();
 
-                nextUnit = GetBiggerInitiativeUnit();
+                nextUnit = GetLessInitiativeUnit();
 
                 if (nextUnit is null)
-                    nextUnit = GetLowestInitiativeUnit();
+                    nextUnit = GetBiggestInitiativeUnit();
 
                 _initiative = nextUnit.Initiative;
             }
@@ -50,14 +47,14 @@ namespace Runtime
             _handledInitiativeUnits.Contains(unit) == false);
         }
 
-        private UnitView GetLowestInitiativeUnit()
+        private UnitView GetBiggestInitiativeUnit()
         {
-            return _environmentController.Units.OrderBy(unit => unit.Initiative).First();
+            return _environmentController.Units.OrderByDescending(unit => unit.Initiative).First();
         }
 
-        private UnitView GetBiggerInitiativeUnit()
+        private UnitView GetLessInitiativeUnit()
         {
-            return _environmentController.Units.FirstOrDefault(unit => unit.Initiative > _initiative);
+            return _environmentController.Units.FirstOrDefault(unit => unit.Initiative < _initiative);
         }
     }
 }

@@ -1,78 +1,31 @@
-using System;
-using UnityEngine;
-
 namespace Runtime
 {
-    public class UnitPresenter : IDamageable
+    public abstract class UnitPresenter
     {
-        private UnitView _view;
-        private IEnvironmentController _environmentController;
-        private IQueryController _queryController;
-        private Team _team;
-        private float _damage;
-        private int _stack;
+        protected IEnvironmentController EnvironmentController { get; private set; }
+        protected IQueryController QueryController { get; private set; }
+        protected UnitView View { get; private set; }
+        public int Stack { get; protected set; }
+        public Team Team { get; set; }
 
         public UnitPresenter(UnitView view,
             IEnvironmentController environmentController,
-            IQueryController queryController)
+            IQueryController queryController,
+            Team team,
+            int stack)
         {
-            _view = view;
-            _environmentController = environmentController;
-            _queryController = queryController;
+            EnvironmentController = environmentController;
+            QueryController = queryController;
 
-            _stack = 30;
-            _damage = 15;
+            View = view;
+            Stack = stack;
+            Team = team;
+
             UpdateStackValue();
         }
 
-        private void UpdateStackValue() => _view.UpdateStackValue(_stack);
+        public abstract void Activate();
 
-        public void Activate()
-        {
-            _view.Cell.Highlighted = true;
-            _environmentController.CellClicked += OnCellClicked;
-        }
-
-        public void ReceiveDamage(float damage)
-        {
-            _stack = Mathf.Max(_stack - (int)damage, 0);
-
-            Debug.Log($"{_view.name} Receive Damage");
-
-            if (_stack <= 0)
-            {
-                _view.Cell.Highlighted = false;
-                _view.Disapear();
-            }
-            else
-                UpdateStackValue();
-        }
-
-        private void OnCellClicked(Cell cell)
-        {
-            if (cell == _view.Cell)
-                return;
-
-            var unitAtClickedCell = _environmentController.GetUnitAt(cell);
-
-            if (unitAtClickedCell is null)
-            {
-                _environmentController.CellClicked -= OnCellClicked;
-
-                _view.Cell.Highlighted = false;
-                _view.MoveTo(cell);
-                _queryController.Next();
-            }
-            else
-            {
-                _environmentController.CellClicked -= OnCellClicked;
-
-                if (unitAtClickedCell.Presenter is IDamageable damageable)
-                    damageable?.ReceiveDamage(_damage);
-
-                _view.Cell.Highlighted = false;
-                _queryController.Next();
-            }
-        }
+        protected void UpdateStackValue() => View.UpdateStackValue(Stack);
     }
 }

@@ -1,6 +1,8 @@
 namespace Runtime
 {
-    public class Team
+    public enum Team
     {
+        Left,
+        Right
     }
 }

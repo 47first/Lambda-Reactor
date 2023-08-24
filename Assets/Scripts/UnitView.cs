@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -13,6 +12,7 @@ namespace Runtime
 
         [field: SerializeField] public Cell Cell { get; private set; }
         [SerializeField] private TextMeshProUGUI _stackLabel;
+        [SerializeField] private UnitType _type;
 
         public UnitPresenter Presenter { get; private set; }
 
@@ -23,28 +23,28 @@ namespace Runtime
         public void MoveTo(Cell cell)
         {
             Cell = cell;
-
             transform.DOMove(cell.transform.position, 0.5f);
         }
 
-        public void UpdateStackValue(int stackCount)
+        public void UpdateStackValue(int stackCount) => _stackLabel.text = stackCount.ToString();
+
+        private void Awake() => InitializePresenter();
+
+        private void InitializePresenter()
         {
-            _stackLabel.text = stackCount.ToString();
+            Presenter = _type switch
+            {
+                UnitType.Knight => new KnightPresenter(this, _environmentController, _queryController),
+                UnitType.Shooter => throw null,
+                UnitType.MrBeast => throw null,
+                UnitType.Sceleton => throw null,
+                UnitType.Zombie => throw null,
+                UnitType.Gus => throw null
+            };
         }
 
-        private void Awake()
-        {
-            Presenter = new UnitPresenter(this, _environmentController, _queryController);
-        }
+        private void Start() => MoveTo(Cell);
 
-        private void Start()
-        {
-            MoveTo(Cell);
-        }
-
-        internal void Disapear()
-        {
-            gameObject.SetActive(false);
-        }
+        internal void Disapear() => Destroy(gameObject);
     }
 }
