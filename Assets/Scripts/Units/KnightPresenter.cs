@@ -5,6 +5,8 @@ namespace Runtime
 {
     public sealed class KnightPresenter : UnitPresenter, IDamageable, ICellEventsObserver
     {
+        private const float extraStepChance = 45;
+
         public KnightPresenter(UnitView view,
             IEnvironmentController environmentController,
             IQueryController queryController,
@@ -20,6 +22,7 @@ namespace Runtime
         }
 
         private int _receivedDamageRequestCount = 0;
+
         public void ReceiveDamage(float damage)
         {
             var absorbedDamaged = GetAbsorbedDamage(damage);
@@ -46,6 +49,7 @@ namespace Runtime
         private float GetPercentOf(float y, float percent) => (y * percent) / 100;
 
         private System.Action _next;
+
         public override void Activate(System.Action next)
         {
             _next = next;
@@ -69,9 +73,12 @@ namespace Runtime
         }
 
         private bool _extraStepInvoked = false;
+
         public void CellClicked(Cell cell)
         {
-            if (cell == View.Cell || View.Cell.Distance(cell) > Range)
+            var isCellValid = cell == View.Cell || View.Cell.Distance(cell) > Range;
+
+            if (isCellValid)
                 return;
 
             var unitAtClickedCell = EnvironmentController.GetUnitAt(cell);
@@ -93,12 +100,15 @@ namespace Runtime
                 }
             }
 
-            canInvokeNext = canInvokeNext && _extraStepInvoked && (Random.Range(0, 100) < 45);
+            var hasExtraStep = _extraStepInvoked == false && (Random.Range(0, 100) < extraStepChance);
+
+            canInvokeNext = canInvokeNext && hasExtraStep == false;
+
+            if (hasExtraStep)
+                _extraStepInvoked = true;
 
             if (canInvokeNext)
                 CallNext();
-            else
-                _extraStepInvoked = true;
         }
 
         private void CallNext()
