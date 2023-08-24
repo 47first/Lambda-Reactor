@@ -146,8 +146,10 @@ namespace Runtime
             if (unitsToAttack.Any() == false)
                 return;
 
+            var damage = (Random.Range(minBowDamage, maxFistsDamage) / (_bowMode == BowMode.Multiple ? 2 : 1)) * Stack;
+
             foreach (IDamageable unit in unitsToAttack.Select(unit => unit.Presenter))
-                unit.ReceiveDamage(3000);
+                unit.ReceiveDamage(damage);
 
             Deactivate();
         }
