@@ -11,11 +11,23 @@ namespace Runtime
         [SerializeField] private TMP_Dropdown _dropDown;
         [SerializeField] private Button _passButton;
 
-        private IGameViewObservable _gameViewObserver;
+        private IDropdownObserver _dropdownObserver;
+        private IPassObserver _passObserver;
 
-        public void SetObserver(IGameViewObservable gameViewObserver) => _gameViewObserver = gameViewObserver;
+        public void SetObserver<T>(T observer)
+        {
+            if (observer is IDropdownObserver dropdownObserver)
+                _dropdownObserver = dropdownObserver;
 
-        public void ResetObserver() => _gameViewObserver = null;
+            if(observer is IPassObserver passObserver)
+                _passObserver = passObserver;
+        }
+
+        public void ResetObserver()
+        {
+            _dropdownObserver = null;
+            _passObserver = null;
+        }
 
         public void SetOptions(IEnumerable<string> strings)
         {
@@ -34,8 +46,8 @@ namespace Runtime
             _dropDown.onValueChanged.AddListener(OnDropdownValueChanged);
         }
 
-        private void OnDropdownValueChanged(int index) => _gameViewObserver?.DropdownValueChanged(index);
-        private void OnPassButtonClick() => _gameViewObserver?.PassButtonClicked();
+        private void OnDropdownValueChanged(int index) => _dropdownObserver?.DropdownValueChanged(index);
+        private void OnPassButtonClick() => _passObserver?.Pass();
 
         public void HideDropdown()
         {
@@ -46,19 +58,5 @@ namespace Runtime
         {
             throw new NotImplementedException();
         }
-    }
-
-    public interface IGameView
-    {
-        public void HideDropdown();
-        public void SetObserver(IGameViewObservable gameViewObserver);
-        public void ResetObserver();
-        public void SetOptions();
-    }
-
-    public interface IGameViewObservable
-    {
-        public void PassButtonClicked();
-        public void DropdownValueChanged(int index);
     }
 }

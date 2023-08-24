@@ -2,7 +2,7 @@ using System;
 
 namespace Runtime
 {
-    public abstract class UnitPresenter : IQueryObservable, IGameViewObservable
+    public abstract class UnitPresenter : IQueryObservable, IPassObserver
     {
         private int _stack;
         protected IEnvironmentController EnvironmentController { get; private set; }
@@ -47,9 +47,9 @@ namespace Runtime
         {
             _next = next;
 
-            OnActivate();
-
             GameView.SetObserver(this);
+
+            OnActivate();
         }
 
         protected virtual void OnActivate() => ExecuteNext();
@@ -63,8 +63,6 @@ namespace Runtime
             _next = null;
         }
 
-        public void PassButtonClicked() => ExecuteNext();
-
-        public void DropdownValueChanged(int index) { }
+        public void Pass() => ExecuteNext();
     }
 }
