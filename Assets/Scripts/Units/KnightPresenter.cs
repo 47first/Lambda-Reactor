@@ -5,17 +5,17 @@ namespace Runtime
 {
     public sealed class KnightPresenter : UnitPresenter, IDamageable
     {
-        private int _health = 20;
-        private int _range = 5;
-        private int _minDamage = 6;
-        private int _maxDamage = 10;
-        private int _initiative = 4;
+        private const int _health = 20;
+        private const int _range = 5;
+        private const int _minDamage = 6;
+        private const int _maxDamage = 10;
+        private const int initiative = 4;
 
         public KnightPresenter(UnitView view,
             IEnvironmentController environmentController,
             IQueryController queryController,
             Team team,
-            int stack) : base(view, environmentController, queryController, team, stack)
+            int stack) : base(view, environmentController, queryController, team, initiative, stack)
         {
         }
 
@@ -53,26 +53,30 @@ namespace Runtime
 
         private void OnCellClicked(Cell cell)
         {
-            if (cell == View.Cell)
+            if (cell == View.Cell || Vector2.Distance(View.Cell.Position, cell.Position) > _range)
                 return;
 
             var unitAtClickedCell = EnvironmentController.GetUnitAt(cell);
 
-            if (unitAtClickedCell is null && Vector2.Distance(View.Cell.Position, cell.Position) < _range)
+            if (unitAtClickedCell is null)
             {
                 EnvironmentController.CellClicked -= OnCellClicked;
+                EnvironmentController.CellSelected -= OnCellSelected;
 
                 View.MoveTo(cell);
 
                 QueryController.Next();
             }
             
-            if(unitAtClickedCell is not null && unitAtClickedCell.Presenter.Team != Team)
+            if(unitAtClickedCell is not null)
             {
-                if (unitAtClickedCell.Presenter is IDamageable damageable)
+                if (unitAtClickedCell.Presenter is IDamageable damageable && unitAtClickedCell.Presenter.Team != Team)
                 {
                     EnvironmentController.CellClicked -= OnCellClicked;
+                    EnvironmentController.CellSelected -= OnCellSelected;
+
                     damageable?.ReceiveDamage(Random.Range(_minDamage, _maxDamage) * Stack);
+
                     QueryController.Next();
                 }
             }

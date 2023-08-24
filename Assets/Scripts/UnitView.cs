@@ -10,15 +10,18 @@ namespace Runtime
         [Inject] private IEnvironmentController _environmentController;
         [Inject] private IQueryController _queryController;
 
+        [field: Header("View Settings")]
         [field: SerializeField] public Cell Cell { get; private set; }
         [SerializeField] private TextMeshProUGUI _stackLabel;
+
+        [Header("Unit Settings")]
+        [SerializeField] private UnitType _type;
         [SerializeField] private Team _team;
         [SerializeField] private int _stack;
-        [SerializeField] private UnitType _type;
 
         public UnitPresenter Presenter { get; private set; }
 
-        public int Initiative { get; set; }
+        public int Initiative { get => Presenter.Initiative; }
 
         public void Activate() => Presenter?.Activate();
 

@@ -16,12 +16,15 @@ namespace Runtime
                 UpdateStackValue();
             }
         }
+
         public Team Team { get; set; }
+        public int Initiative { get; private set; }
 
         public UnitPresenter(UnitView view,
             IEnvironmentController environmentController,
             IQueryController queryController,
             Team team,
+            int initiative,
             int stack)
         {
             EnvironmentController = environmentController;
@@ -30,6 +33,7 @@ namespace Runtime
             View = view;
             Stack = stack;
             Team = team;
+            Initiative = initiative;
 
             UpdateStackValue();
         }
