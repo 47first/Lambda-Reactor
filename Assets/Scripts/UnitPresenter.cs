@@ -18,12 +18,7 @@ namespace Runtime
                 View.UpdateStackValue(Stack);
             }
         }
-
         public Team Team { get; protected set; }
-        public int Health { get; protected set; }
-        public int Range { get; protected set; }
-        public int MinDamage { get; protected set; }
-        public int MaxDamage { get; protected set; }
         public int Initiative { get; protected set; }
 
         public UnitPresenter(UnitView view,

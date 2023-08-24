@@ -8,10 +8,12 @@ namespace Runtime
     {
         private List<UnitView> _units = new();
         private List<Cell> _cells = new();
-        private ICellEventsObserver _cellObserver;
+
+        private ICellClickObserver _cellClickObserver;
+        private ICellSelectObserver _cellSelectObserver;
 
         public IEnumerable<UnitView> Units => _units.Where(unit => unit.gameObject != null && unit.gameObject.activeSelf);
-        public IEnumerable<Cell> Cells => _cells/*.Where(cell => cell != null && cell.gameObject.activeSelf)*/;
+        public IEnumerable<Cell> Cells => _cells;
 
         public UnitView GetUnitAt(Cell cell) => Units.FirstOrDefault(unit => unit.Cell == cell);
 
@@ -27,9 +29,20 @@ namespace Runtime
             }
         }
 
-        public void SetCellObserver(ICellEventsObserver cellObserver) => _cellObserver = cellObserver;
+        public void SetCellObserver<T>(T cellObserver)
+        {
+            if(cellObserver is ICellClickObserver clickObserver)
+                _cellClickObserver = clickObserver;
 
-        public void ResetCellObserver() => _cellObserver = null;
+            if(cellObserver is ICellSelectObserver selectObserver)
+                _cellSelectObserver = selectObserver;
+        }
+
+        public void ResetCellObserver()
+        {
+            _cellClickObserver = null;
+            _cellSelectObserver = null;
+        }
 
         public void SetAllCellsTo(CellState state)
         {
@@ -37,9 +50,9 @@ namespace Runtime
                 cell.SetState(state);
         }
 
-        private void OnCellClicked(Cell cell) => _cellObserver?.CellClicked(cell);
+        private void OnCellClicked(Cell cell) => _cellClickObserver?.CellClicked(cell);
 
-        private void OnCellSelected(Cell cell) => _cellObserver?.CellSelected(cell);
+        private void OnCellSelected(Cell cell) => _cellSelectObserver?.CellSelected(cell);
 
         public Cell GetCellAt(Vector2 position) => _cells.FirstOrDefault(cell => cell.Position == position);
     }

@@ -44,7 +44,9 @@ namespace Runtime
                 UnitType.Knight => new KnightPresenter(this, _environmentController,
                 _queryController, _gameView, _team, _stack),
 
-                UnitType.Shooter => throw null,
+                UnitType.Shooter => new ShooterPresenter(this, _environmentController,
+                _queryController, _gameView, _team, _stack),
+
                 UnitType.MrBeast => throw null,
                 UnitType.Sceleton => throw null,
                 UnitType.Zombie => throw null,

@@ -3,9 +3,13 @@ using UnityEngine;
 
 namespace Runtime
 {
-    public sealed class KnightPresenter : UnitPresenter, IDamageable, ICellEventsObserver
+    public sealed class KnightPresenter : UnitPresenter, IDamageable, ICellClickObserver
     {
         private const float extraStepChance = 45;
+        private const int health = 20;
+        private const float range = 5;
+        private const float minDamage = 6;
+        private const float maxDamage = 10;
 
         public KnightPresenter(UnitView view,
             IEnvironmentController environmentController,
@@ -15,10 +19,6 @@ namespace Runtime
             int stack)
             : base(view, environmentController, queryController, gameView, team, stack)
         {
-            Health = 20;
-            Range = 5;
-            MinDamage = 6;
-            MaxDamage = 10;
             Initiative = 4;
         }
 
@@ -28,7 +28,7 @@ namespace Runtime
         {
             var absorbedDamaged = GetAbsorbedDamage(damage);
 
-            int damagedStacks = (int)((damage - absorbedDamaged) / Health);
+            int damagedStacks = (int)((damage - absorbedDamaged) / health);
 
             Stack -= damagedStacks;
             _receivedDamageRequestCount++;
@@ -61,7 +61,7 @@ namespace Runtime
             EnvironmentController.SetAllCellsTo(CellState.Unactive);
 
             var cellsInRange = EnvironmentController.Cells
-                .Where(cell => cell.Distance(View.Cell) < Range);
+                .Where(cell => cell.Distance(View.Cell) < range);
 
             foreach (var cell in cellsInRange)
                 cell.SetState(CellState.Active);
@@ -73,7 +73,7 @@ namespace Runtime
 
         public void CellClicked(Cell cell)
         {
-            var isCellValid = cell == View.Cell || View.Cell.Distance(cell) > Range;
+            var isCellValid = cell == View.Cell || View.Cell.Distance(cell) > range;
 
             if (isCellValid)
                 return;
@@ -92,7 +92,7 @@ namespace Runtime
             {
                 if (unitAtClickedCell.Presenter is IDamageable damageable && unitAtClickedCell.Presenter.Team != Team)
                 {
-                    damageable?.ReceiveDamage(Random.Range(MinDamage, MaxDamage) * Stack);
+                    damageable?.ReceiveDamage(Random.Range(minDamage, maxDamage) * Stack);
                     canInvokeNext = true;
                 }
             }
@@ -115,10 +115,6 @@ namespace Runtime
             EnvironmentController.ResetCellObserver();
 
             ExecuteNext();
-        }
-
-        public void CellSelected(Cell cell)
-        {
         }
     }
 }

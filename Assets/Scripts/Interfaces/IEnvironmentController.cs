@@ -5,7 +5,7 @@ namespace Runtime
 {
     public interface IEnvironmentController
     {
-        public void SetCellObserver(ICellEventsObserver cellObserver);
+        public void SetCellObserver<T>(T cellObserver);
 
         public void ResetCellObserver();
 

@@ -7,11 +7,13 @@ namespace Runtime
 {
     public class QueryController : IQueryController
     {
-        public QueryController(IEnvironmentController environmentController)
+        public QueryController(IEnvironmentController environmentController, IGameView gameView)
         {
             _environmentController = environmentController;
+            _gameView = gameView;
         }
 
+        private IGameView _gameView;
         private IEnvironmentController _environmentController;
         private List<UnitView> _handledInitiativeUnits = new List<UnitView>();
         private IQueryObservable _queryObservable;
@@ -19,12 +21,24 @@ namespace Runtime
 
         public void Next()
         {
+            if (IsEndOfGame())
+            {
+                _gameView.ShowResult();
+                return;
+            }
+
             var nextUnit = GetNextInitiativeUnit();
 
             Debug.Log($"{nextUnit.name} Turn");
 
             _queryObservable = nextUnit.Presenter;
             _queryObservable?.Activate(() => RequestNext(nextUnit.Presenter));
+        }
+
+        private bool IsEndOfGame()
+        {
+            return _environmentController.Units.Any(unit => unit.Presenter.Team == Team.Left) == false ||
+                _environmentController.Units.Any(unit => unit.Presenter.Team == Team.Right) == false;
         }
 
         private UnitView GetNextInitiativeUnit()

@@ -30,6 +30,7 @@ namespace Runtime
                 CellState.Active => spriteRenderer.DOColor(Color.white, 0.2f),
                 CellState.Unactive => spriteRenderer.DOColor(Color.gray, 0.2f),
                 CellState.Highligthed => spriteRenderer.DOColor(Color.cyan, 0.2f),
+                _ => throw null
             };
         }
 
