@@ -12,13 +12,13 @@ namespace Runtime
         public int Stack
         {
             get => _stack;
-            protected set
+            set
             {
                 _stack = value;
                 View.UpdateStackValue(Stack);
             }
         }
-        public Team Team { get; protected set; }
+        public Team Team { get; set; }
         public int Initiative { get; protected set; }
 
         public UnitPresenter(UnitView view,

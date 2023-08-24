@@ -21,9 +21,23 @@ namespace Runtime
         [SerializeField] private Team _team;
         [SerializeField] private int _stack;
 
+        [Header("Sceleton")]
+        [SerializeField] private UnitView _sceletonPrefab;
+
         public UnitPresenter Presenter { get; private set; }
 
         public int Initiative => Presenter.Initiative;
+
+        public void Setup(IEnvironmentController environmentController,
+            IQueryController queryController,
+            IGameView gameView)
+        {
+            _environmentController = environmentController;
+            _queryController = queryController;
+            _gameView = gameView;
+
+            InitializePresenter();
+        }
 
         public void MoveTo(Cell cell)
         {
@@ -48,12 +62,15 @@ namespace Runtime
                 _queryController, _gameView, _team, _stack),
 
                 UnitType.MrBeast => throw null,
-                UnitType.Sceleton => throw null,
-                UnitType.Zombie => throw null,
+
+                UnitType.Sceleton => new SceletonPresenter(this, _environmentController,
+                _queryController, _gameView, _team, _stack, _sceletonPrefab),
+
+                UnitType.Zombie => new ZombiePresenter(this, _environmentController,
+                _queryController, _gameView, _team, _stack),
+
                 UnitType.Gus => throw null
             };
         }
-
-        private void Start() => MoveTo(Cell);
     }
 }

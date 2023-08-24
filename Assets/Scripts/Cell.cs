@@ -20,8 +20,6 @@ namespace Runtime
             if (_state == state)
                 return;
 
-            Debug.Log($"{_state} | {state}");
-
             _state = state;
 
             _colorTween?.Kill();

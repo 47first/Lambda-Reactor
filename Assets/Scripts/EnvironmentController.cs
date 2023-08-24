@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Runtime
@@ -19,8 +20,8 @@ namespace Runtime
 
         private void Start()
         {
-            _cells.AddRange(Resources.FindObjectsOfTypeAll<Cell>());
-            _units.AddRange(Resources.FindObjectsOfTypeAll<UnitView>());
+            _cells.AddRange(Object.FindObjectsOfType<Cell>());
+            _units.AddRange(Object.FindObjectsOfType<UnitView>());
 
             foreach (var cell in _cells)
             {
@@ -55,5 +56,7 @@ namespace Runtime
         private void OnCellSelected(Cell cell) => _cellSelectObserver?.CellSelected(cell);
 
         public Cell GetCellAt(Vector2 position) => _cells.FirstOrDefault(cell => cell.Position == position);
+
+        public void RegisterUnit(UnitView unit) => _units.Add(unit);
     }
 }
