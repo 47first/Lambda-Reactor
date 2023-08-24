@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,15 +14,17 @@ namespace Runtime
 
         private IEnvironmentController _environmentController;
         private List<UnitView> _handledInitiativeUnits = new List<UnitView>();
+        private IQueryObservable _queryObservable;
         private int _initiative;
 
         public void Next()
         {
             var nextUnit = GetNextInitiativeUnit();
+
             Debug.Log($"{nextUnit.name} Turn");
-            Debug.Log(nextUnit != null);
-            Debug.Log(nextUnit.gameObject != null);
-            nextUnit.Activate();
+
+            _queryObservable = nextUnit.Presenter;
+            _queryObservable?.Activate(() => RequestNext(nextUnit.Presenter));
         }
 
         private UnitView GetNextInitiativeUnit()
@@ -59,6 +62,14 @@ namespace Runtime
         private UnitView GetLessInitiativeUnit()
         {
             return _environmentController.Units.FirstOrDefault(unit => unit.Initiative < _initiative);
+        }
+
+        private void RequestNext(IQueryObservable queryObservable)
+        {
+            if (queryObservable != _queryObservable)
+                throw new InvalidOperationException("Expired request");
+
+            Next();
         }
     }
 }

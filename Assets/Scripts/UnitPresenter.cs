@@ -1,9 +1,10 @@
+using System;
+
 namespace Runtime
 {
-    public abstract class UnitPresenter
+    public abstract class UnitPresenter : IQueryObservable
     {
         private int _stack;
-
         protected IEnvironmentController EnvironmentController { get; private set; }
         protected IQueryController QueryController { get; private set; }
         protected UnitView View { get; private set; }
@@ -13,18 +14,21 @@ namespace Runtime
             protected set
             {
                 _stack = value;
-                UpdateStackValue();
+                View.UpdateStackValue(Stack);
             }
         }
 
-        public Team Team { get; set; }
-        public int Initiative { get; private set; }
+        public Team Team { get; protected set; }
+        public int Health { get; protected set; }
+        public int Range { get; protected set; }
+        public int MinDamage { get; protected set; }
+        public int MaxDamage { get; protected set; }
+        public int Initiative { get; protected set; }
 
         public UnitPresenter(UnitView view,
             IEnvironmentController environmentController,
             IQueryController queryController,
             Team team,
-            int initiative,
             int stack)
         {
             EnvironmentController = environmentController;
@@ -33,13 +37,8 @@ namespace Runtime
             View = view;
             Stack = stack;
             Team = team;
-            Initiative = initiative;
-
-            UpdateStackValue();
         }
 
-        public abstract void Activate();
-
-        private void UpdateStackValue() => View.UpdateStackValue(Stack);
+        public virtual void Activate(Action next) => next?.Invoke();
     }
 }

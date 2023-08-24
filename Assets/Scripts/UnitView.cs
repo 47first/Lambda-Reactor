@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -21,9 +22,7 @@ namespace Runtime
 
         public UnitPresenter Presenter { get; private set; }
 
-        public int Initiative { get => Presenter.Initiative; }
-
-        public void Activate() => Presenter?.Activate();
+        public int Initiative => Presenter.Initiative;
 
         public void MoveTo(Cell cell)
         {
@@ -32,6 +31,8 @@ namespace Runtime
         }
 
         public void UpdateStackValue(int stackCount) => _stackLabel.text = stackCount.ToString();
+
+        internal void Disapear() => gameObject.SetActive(false);
 
         private void Awake() => InitializePresenter();
 
@@ -49,7 +50,5 @@ namespace Runtime
         }
 
         private void Start() => MoveTo(Cell);
-
-        internal void Disapear() => gameObject.SetActive(false);
     }
 }

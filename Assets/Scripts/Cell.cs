@@ -1,6 +1,5 @@
 ﻿using DG.Tweening;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Runtime
@@ -11,8 +10,8 @@ namespace Runtime
         private Tween _colorTween;
         private CellState _state = CellState.Active;
 
-        public event Action Clicked;
-        public event Action Selected;
+        public event Action<Cell> Clicked;
+        public event Action<Cell> Selected;
 
         [field: SerializeField] public Vector2 Position { get; set; }
 
@@ -34,27 +33,16 @@ namespace Runtime
             };
         }
 
+        public float Distance(Cell cell) => Vector2.Distance(Position, cell.Position);
+
         private void OnMouseDown()
         {
             if (Input.GetMouseButtonDown(0))
-            {
-                Clicked?.Invoke();
-            }
+                Clicked?.Invoke(this);
         }
 
-        private void OnMouseEnter()
-        {
-            Selected?.Invoke();
-        }
+        private void OnMouseEnter() => Selected?.Invoke(this);
 
-        private void OnDestroy()
-        {
-            _colorTween?.Kill();
-        }
-
-        private void Start()
-        {
-            SetState(_state);
-        }
+        private void OnDestroy() => _colorTween?.Kill();
     }
 }
