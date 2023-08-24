@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Runtime
 {
@@ -17,6 +18,7 @@ namespace Runtime
         public void Next()
         {
             var nextUnit = GetNextInitiativeUnit();
+            Debug.Log($"{nextUnit.name} Turn");
             nextUnit.Activate();
         }
 

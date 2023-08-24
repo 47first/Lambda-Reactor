@@ -11,9 +11,11 @@ namespace Runtime
         private List<Cell> _cells = new();
 
         public IEnumerable<UnitView> Units => _units.Where(unit => unit != null && unit.gameObject.activeSelf);
+        public IEnumerable<Cell> Cells => _cells/*.Where(cell => cell != null && cell.gameObject.activeSelf)*/;
 
 
         public event Action<Cell> CellClicked;
+        public event Action<Cell> CellSelected;
 
         public UnitView GetUnitAt(Cell cell)
         {
@@ -27,12 +29,19 @@ namespace Runtime
 
             foreach (var cell in _cells)
             {
-                cell.Clicked += () => CellClicked?.Invoke(cell);;
+                cell.Clicked += () => CellClicked?.Invoke(cell);
+                cell.Selected += () => CellSelected?.Invoke(cell);
             }
         }
 
-        private void SetCellsPositions()
+        public void SetAllCellsTo(CellState state)
         {
+            foreach (var cell in _cells)
+                cell.SetState(state);
+
+            //_cells.ForEach(cell => cell.SetState(state));
         }
+
+        public Cell GetCellAt(Vector2 position) => _cells.FirstOrDefault(cell => cell.Position == position);
     }
 }

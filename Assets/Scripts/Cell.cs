@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Runtime
@@ -8,47 +9,29 @@ namespace Runtime
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
         private Tween _colorTween;
+        private CellState _state = CellState.Active;
 
         public event Action Clicked;
+        public event Action Selected;
 
-        public Vector2 Position { get; set; }
+        [field: SerializeField] public Vector2 Position { get; set; }
 
-        private bool _highlighted;
-        public bool Highlighted
+        public void SetState(CellState state)
         {
-            get => _highlighted;
-            set
+            if (_state == state)
+                return;
+
+            Debug.Log($"{_state} | {state}");
+
+            _state = state;
+
+            _colorTween?.Kill();
+            _colorTween = _state switch
             {
-                if (_highlighted == value)
-                    return;
-
-                _highlighted = value;
-
-                _colorTween?.Kill();
-                if (_highlighted)
-                    _colorTween = spriteRenderer.DOColor(Color.cyan, 0.2f);
-                else
-                    _colorTween = spriteRenderer.DOColor(Color.white, 0.2f);
-            }
-        }
-
-        private void OnMouseEnter()
-        {
-            if (_highlighted)
-                return;
-
-            _colorTween?.Kill();
-            _colorTween = spriteRenderer.DOColor(Color.gray, 0.2f);
-        }
-
-
-        private void OnMouseExit()
-        {
-            if (_highlighted)
-                return;
-
-            _colorTween?.Kill();
-            _colorTween = spriteRenderer.DOColor(Color.white, 0.2f);
+                CellState.Active => spriteRenderer.DOColor(Color.white, 0.2f),
+                CellState.Unactive => spriteRenderer.DOColor(Color.gray, 0.2f),
+                CellState.Highligthed => spriteRenderer.DOColor(Color.cyan, 0.2f),
+            };
         }
 
         private void OnMouseDown()
@@ -60,9 +43,20 @@ namespace Runtime
             }
         }
 
+        private void OnMouseEnter()
+        {
+            Debug.Log("Selected");
+            Selected?.Invoke();
+        }
+
         private void OnDestroy()
         {
             _colorTween?.Kill();
+        }
+
+        private void Start()
+        {
+            SetState(_state);
         }
     }
 }

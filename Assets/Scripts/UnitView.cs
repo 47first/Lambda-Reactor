@@ -12,6 +12,8 @@ namespace Runtime
 
         [field: SerializeField] public Cell Cell { get; private set; }
         [SerializeField] private TextMeshProUGUI _stackLabel;
+        [SerializeField] private Team _team;
+        [SerializeField] private int _stack;
         [SerializeField] private UnitType _type;
 
         public UnitPresenter Presenter { get; private set; }
@@ -34,7 +36,7 @@ namespace Runtime
         {
             Presenter = _type switch
             {
-                UnitType.Knight => new KnightPresenter(this, _environmentController, _queryController),
+                UnitType.Knight => new KnightPresenter(this, _environmentController, _queryController, _team, _stack),
                 UnitType.Shooter => throw null,
                 UnitType.MrBeast => throw null,
                 UnitType.Sceleton => throw null,

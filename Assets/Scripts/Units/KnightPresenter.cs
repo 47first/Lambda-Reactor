@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace Runtime
@@ -23,10 +24,7 @@ namespace Runtime
             Stack = Mathf.Max(Stack - (int)damage, 0);
 
             if (Stack <= 0)
-            {
-                View.Cell.Highlighted = false;
                 View.Disapear();
-            }
             else
                 UpdateStackValue();
 
@@ -35,8 +33,27 @@ namespace Runtime
 
         public override void Activate()
         {
-            View.Cell.Highlighted = true;
+            EnvironmentController.SetAllCellsTo(CellState.Unactive);
+
+            foreach (var cell in EnvironmentController.Cells)
+            {
+                if (Vector2.Distance(View.Cell.Position, cell.Position) < 3)
+                {
+                    Debug.Log("In range");
+                    cell.SetState(CellState.Active);
+                }
+            }
+
+            View.Cell.SetState(CellState.Highligthed);
+
             EnvironmentController.CellClicked += OnCellClicked;
+            EnvironmentController.CellSelected += OnCellSelected;
+        }
+
+        private void OnCellSelected(Cell cell)
+        {
+            if (cell == View.Cell)
+                return;
         }
 
         private void OnCellClicked(Cell cell)
@@ -46,20 +63,21 @@ namespace Runtime
 
             var unitAtClickedCell = EnvironmentController.GetUnitAt(cell);
 
-            EnvironmentController.CellClicked -= OnCellClicked;
-
-            if (unitAtClickedCell is null)
+            if (unitAtClickedCell is null && Vector2.Distance(View.Cell.Position, cell.Position) < 3)
             {
-                View.Cell.Highlighted = false;
+                EnvironmentController.CellClicked -= OnCellClicked;
+
                 View.MoveTo(cell);
                 QueryController.Next();
             }
-            else
+            
+            if(unitAtClickedCell is not null)
             {
+                EnvironmentController.CellClicked -= OnCellClicked;
+
                 if (unitAtClickedCell.Presenter is IDamageable damageable)
                     damageable?.ReceiveDamage(Random.Range(_minDamage, _maxDamage));
 
-                View.Cell.Highlighted = false;
                 QueryController.Next();
             }
         }

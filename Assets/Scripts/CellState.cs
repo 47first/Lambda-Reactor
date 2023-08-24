@@ -2,8 +2,8 @@
 {
     public enum CellState
     {
-        Default,
-        Selected,
+        Unactive,
+        Active,
         Highligthed
     }
 }
