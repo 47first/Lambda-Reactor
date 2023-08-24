@@ -47,6 +47,6 @@ namespace Runtime
 
         private void Start() => MoveTo(Cell);
 
-        internal void Disapear() => Destroy(gameObject);
+        internal void Disapear() => gameObject.SetActive(false);
     }
 }

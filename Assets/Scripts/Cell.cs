@@ -38,14 +38,12 @@ namespace Runtime
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Cell clicked");
                 Clicked?.Invoke();
             }
         }
 
         private void OnMouseEnter()
         {
-            Debug.Log("Selected");
             Selected?.Invoke();
         }
 

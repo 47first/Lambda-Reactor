@@ -19,6 +19,8 @@ namespace Runtime
         {
             var nextUnit = GetNextInitiativeUnit();
             Debug.Log($"{nextUnit.name} Turn");
+            Debug.Log(nextUnit != null);
+            Debug.Log(nextUnit.gameObject != null);
             nextUnit.Activate();
         }
 

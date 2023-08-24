@@ -10,7 +10,7 @@ namespace Runtime
         private List<UnitView> _units = new();
         private List<Cell> _cells = new();
 
-        public IEnumerable<UnitView> Units => _units.Where(unit => unit != null && unit.gameObject.activeSelf);
+        public IEnumerable<UnitView> Units => _units.Where(unit => unit.gameObject != null && unit.gameObject.activeSelf);
         public IEnumerable<Cell> Cells => _cells/*.Where(cell => cell != null && cell.gameObject.activeSelf)*/;
 
 
