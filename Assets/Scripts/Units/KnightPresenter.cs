@@ -10,9 +10,10 @@ namespace Runtime
         public KnightPresenter(UnitView view,
             IEnvironmentController environmentController,
             IQueryController queryController,
+            IGameView gameView,
             Team team,
             int stack)
-            : base(view, environmentController, queryController, team, stack)
+            : base(view, environmentController, queryController, gameView, team, stack)
         {
             Health = 20;
             Range = 5;
@@ -46,14 +47,10 @@ namespace Runtime
             _ => 0
         };
 
-        private float GetPercentOf(float y, float percent) => (y * percent) / 100;
+        private float GetPercentOf(float y, float percent) => y * percent / 100;
 
-        private System.Action _next;
-
-        public override void Activate(System.Action next)
+        protected override void OnActivate()
         {
-            _next = next;
-
             EnvironmentController.SetCellObserver(this);
 
             UpdateCellStates();
@@ -108,16 +105,16 @@ namespace Runtime
                 _extraStepInvoked = true;
 
             if (canInvokeNext)
-                CallNext();
+                Deactivate();
         }
 
-        private void CallNext()
+        private void Deactivate()
         {
             _extraStepInvoked = false;
 
             EnvironmentController.ResetCellObserver();
 
-            _next?.Invoke();
+            ExecuteNext();
         }
 
         public void CellSelected(Cell cell)

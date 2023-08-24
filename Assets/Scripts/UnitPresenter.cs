@@ -2,11 +2,12 @@ using System;
 
 namespace Runtime
 {
-    public abstract class UnitPresenter : IQueryObservable
+    public abstract class UnitPresenter : IQueryObservable, IGameViewObservable
     {
         private int _stack;
         protected IEnvironmentController EnvironmentController { get; private set; }
         protected IQueryController QueryController { get; private set; }
+        protected IGameView GameView { get; private set; }
         protected UnitView View { get; private set; }
         public int Stack
         {
@@ -28,17 +29,42 @@ namespace Runtime
         public UnitPresenter(UnitView view,
             IEnvironmentController environmentController,
             IQueryController queryController,
+            IGameView gameView,
             Team team,
             int stack)
         {
             EnvironmentController = environmentController;
             QueryController = queryController;
+            GameView = gameView;
 
             View = view;
             Stack = stack;
             Team = team;
         }
 
-        public virtual void Activate(Action next) => next?.Invoke();
+        private System.Action _next;
+        public void Activate(Action next)
+        {
+            _next = next;
+
+            OnActivate();
+
+            GameView.SetObserver(this);
+        }
+
+        protected virtual void OnActivate() => ExecuteNext();
+
+        protected void ExecuteNext()
+        {
+            GameView.ResetObserver();
+
+            _next?.Invoke();
+
+            _next = null;
+        }
+
+        public void PassButtonClicked() => ExecuteNext();
+
+        public void DropdownValueChanged(int index) { }
     }
 }

@@ -10,6 +10,7 @@ namespace Runtime
     {
         [Inject] private IEnvironmentController _environmentController;
         [Inject] private IQueryController _queryController;
+        [Inject] private IGameView _gameView;
 
         [field: Header("View Settings")]
         [field: SerializeField] public Cell Cell { get; private set; }
@@ -40,7 +41,9 @@ namespace Runtime
         {
             Presenter = _type switch
             {
-                UnitType.Knight => new KnightPresenter(this, _environmentController, _queryController, _team, _stack),
+                UnitType.Knight => new KnightPresenter(this, _environmentController,
+                _queryController, _gameView, _team, _stack),
+
                 UnitType.Shooter => throw null,
                 UnitType.MrBeast => throw null,
                 UnitType.Sceleton => throw null,
