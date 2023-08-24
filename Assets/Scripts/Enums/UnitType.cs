@@ -6,7 +6,6 @@ namespace Runtime
         Sceleton,
         Zombie,
         Shooter,
-        MrBeast,
-        Gus
+        Bad
     }
 }

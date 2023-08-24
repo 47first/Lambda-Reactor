@@ -61,15 +61,14 @@ namespace Runtime
                 UnitType.Shooter => new ShooterPresenter(this, _environmentController,
                 _queryController, _gameView, _team, _stack),
 
-                UnitType.MrBeast => throw null,
+                UnitType.Bad => new BadPresenter(this, _environmentController,
+                _queryController, _gameView, _team, _stack),
 
                 UnitType.Sceleton => new SceletonPresenter(this, _environmentController,
                 _queryController, _gameView, _team, _stack, _sceletonPrefab),
 
                 UnitType.Zombie => new ZombiePresenter(this, _environmentController,
                 _queryController, _gameView, _team, _stack),
-
-                UnitType.Gus => throw null
             };
         }
     }
