@@ -24,10 +24,12 @@ namespace Runtime
         {
             var absorbedDamaged = GetAbsorbedDamage(damage);
 
-            int damagedStacks = (int)(damage - absorbedDamaged / Health);
+            int damagedStacks = (int)((damage - absorbedDamaged) / Health);
 
             Stack -= damagedStacks;
             _receivedDamageRequestCount++;
+
+            Debug.Log($"{View.name} received {damagedStacks} damage");
 
             if (Stack <= 0)
                 View.Disapear();
@@ -49,6 +51,12 @@ namespace Runtime
             _next = next;
 
             EnvironmentController.SetCellObserver(this);
+
+            UpdateCellStates();
+        }
+
+        private void UpdateCellStates()
+        {
             EnvironmentController.SetAllCellsTo(CellState.Unactive);
 
             var cellsInRange = EnvironmentController.Cells
@@ -58,12 +66,6 @@ namespace Runtime
                 cell.SetState(CellState.Active);
 
             View.Cell.SetState(CellState.Highligthed);
-        }
-
-        private void OnCellSelected(Cell cell)
-        {
-            if (cell == View.Cell)
-                return;
         }
 
         private bool _extraStepInvoked = false;
@@ -78,6 +80,7 @@ namespace Runtime
             if (unitAtClickedCell is null)
             {
                 View.MoveTo(cell);
+                UpdateCellStates();
                 canInvokeNext = true;
             }
 
