@@ -9900,6 +9900,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
+      propertyPath: _stack
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
       propertyPath: _sceletonPrefab
       value: 
       objectReference: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
@@ -9975,6 +9979,10 @@ PrefabInstance:
     - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
       propertyPath: _type
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
+      propertyPath: _stack
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
       propertyPath: _sceletonPrefab
@@ -14998,6 +15006,10 @@ PrefabInstance:
     - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
       propertyPath: _type
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
+      propertyPath: _stack
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
       propertyPath: _sceletonPrefab
@@ -24726,7 +24738,7 @@ GameObject:
   - component: {fileID: 2073975219}
   - component: {fileID: 2073975218}
   m_Layer: 0
-  m_Name: Zombie (1)
+  m_Name: Gus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25978,6 +25990,10 @@ PrefabInstance:
     - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
       propertyPath: _type
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
+      propertyPath: _stack
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1167266523932384220, guid: cfa8147cc10109e4b85db283ac443023, type: 3}
       propertyPath: _sceletonPrefab
